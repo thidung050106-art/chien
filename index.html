@@ -296,7 +296,7 @@
         <!-- <img src="photo.jpg" alt="Em yêu" class="profile-image"> -->
         
         <!-- Ảnh mặc định (xóa dòng này khi đã có ảnh của bạn) -->
-      <img src="em.jpg" alt="Em yêu" <img src="em.jpg" alt="Em yêu" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; object-position: center center;">">
+       <img src="img/em.jpg" alt="Em yêu" class="profile-image">
 
         
         <h1>🎉 Chúc Mừng Sinh Nhật Em Yêu! 🎉</h1>
@@ -314,18 +314,7 @@
         <a href="fireworks.html" class="button">🎆 Bắn pháo hoa cho em!</a>
     </div>
 
-    <!-- Music Player -->
-    <div class="music-player">
-        <button class="music-button" id="musicBtn" onclick="toggleMusic()">
-            🎵
-        </button>
-    </div>
-
-    <!-- Audio Element -->
-    <audio id="bgMusic" loop>
-        <!-- Bạn có thể thêm file nhạc của mình ở đây -->
-        <!-- <source src="your-music-file.mp3" type="audio/mpeg"> -->
-    </audio>
+    <!-- Music Player removed -->
 
     <script>
         // Tạo ngôi sao
@@ -361,74 +350,7 @@
             createStars();
             createFloatingHearts();
             setInterval(createFloatingHearts, 8000);
-            
-            // Tự động phát nhạc nhẹ sau 1 giây
-            setTimeout(() => {
-                const music = document.getElementById('bgMusic');
-                const musicBtn = document.getElementById('musicBtn');
-                
-                // Tạo nhạc nền bằng Web Audio API (nhẹ nhàng)
-                createBackgroundMusic();
-            }, 1000);
         };
-
-        // Tạo nhạc nền nhẹ nhàng bằng Web Audio API
-        let audioContext = null;
-        let musicPlaying = false;
-        let oscillators = [];
-        
-        function createBackgroundMusic() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            
-            // Tạo hợp âm nhẹ nhàng (C major chord: C, E, G)
-            const frequencies = [
-                261.63, // C4
-                329.63, // E4
-                392.00, // G4
-                523.25  // C5
-            ];
-            
-            const gainNode = audioContext.createGain();
-            gainNode.connect(audioContext.destination);
-            gainNode.gain.setValueAtTime(0.03, audioContext.currentTime); // Rất nhỏ để nhẹ nhàng
-            
-            frequencies.forEach((freq, index) => {
-                const osc = audioContext.createOscillator();
-                osc.type = 'sine'; // Âm thanh mềm mại
-                osc.frequency.setValueAtTime(freq, audioContext.currentTime);
-                osc.connect(gainNode);
-                osc.start();
-                oscillators.push(osc);
-            });
-            
-            musicPlaying = true;
-            document.getElementById('musicBtn').classList.add('playing');
-        }
-        
-        function toggleMusic() {
-            const musicBtn = document.getElementById('musicBtn');
-            
-            if (musicPlaying) {
-                // Tắt nhạc
-                oscillators.forEach(osc => osc.stop());
-                oscillators = [];
-                musicPlaying = false;
-                musicBtn.classList.remove('playing');
-                musicBtn.textContent = '🔇';
-            } else {
-                // Bật nhạc
-                createBackgroundMusic();
-                musicBtn.textContent = '🎵';
-            }
-        }
     </script>
 </body>
 </html>
-
-
-
-
-
-

@@ -238,47 +238,6 @@
                 subMsg.style.opacity = '1';
             }, 200);
         }
-
-        // Tạo âm thanh pháo hoa
-        let audioContext = null;
-        let lastSoundTime = 0;
-        
-        function initAudio() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
-        
-        function playFireworkSound() {
-            // Giới hạn tần suất âm thanh để không quá ồn
-            const now = Date.now();
-            if (now - lastSoundTime < 100) return;
-            lastSoundTime = now;
-            
-            if (!audioContext) initAudio();
-            
-            // Tạo âm thanh nổ
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            // Âm thanh pháo hoa: từ cao xuống thấp
-            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
-            
-            // Âm lượng: từ lớn đến nhỏ
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.3);
-        }
-        
-        // Khởi tạo audio khi user tương tác lần đầu
-        document.addEventListener('click', initAudio, { once: true });
-        document.addEventListener('touchstart', initAudio, { once: true });
         // Tạo sao
         function createStars() {
             for (let i = 0; i < 200; i++) {
@@ -298,8 +257,8 @@
             
             // Giảm số lượng cho mobile mượt hơn
             const isMobile = window.innerWidth <= 768;
-            const heartCount = isMobile ? 20 : 40;
-            const particleCount = isMobile ? 50 : 100;
+            const heartCount = isMobile ? 15 : 30;
+            const particleCount = isMobile ? 40 : 80;
             
             // Tạo trái tim
             for (let i = 0; i < heartCount; i++) {
@@ -308,10 +267,10 @@
                 heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
                 heart.style.left = x + 'px';
                 heart.style.top = y + 'px';
-                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                heart.style.fontSize = (Math.random() * 15 + 12) + 'px';
                 
                 const angle = (Math.PI * 2 * i) / heartCount;
-                const velocity = 120 + Math.random() * 180;
+                const velocity = 100 + Math.random() * 150;
                 const tx = Math.cos(angle) * velocity;
                 const ty = Math.sin(angle) * velocity;
                 
@@ -319,7 +278,7 @@
                 heart.style.setProperty('--ty', ty + 'px');
                 
                 document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), 2000);
+                setTimeout(() => heart.remove(), 1500);
             }
 
             // Tạo particles màu sắc
@@ -328,22 +287,22 @@
                 particle.className = 'firework-particle';
                 particle.style.left = x + 'px';
                 particle.style.top = y + 'px';
-                particle.style.width = (Math.random() * 8 + 4) + 'px';
+                particle.style.width = (Math.random() * 6 + 3) + 'px';
                 particle.style.height = particle.style.width;
                 particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-                particle.style.boxShadow = `0 0 10px ${colors[Math.floor(Math.random() * colors.length)]}`;
+                particle.style.boxShadow = `0 0 8px ${colors[Math.floor(Math.random() * colors.length)]}`;
                 
                 const angle = (Math.PI * 2 * i) / particleCount;
-                const velocity = 80 + Math.random() * 200;
+                const velocity = 70 + Math.random() * 150;
                 const tx = Math.cos(angle) * velocity;
                 const ty = Math.sin(angle) * velocity;
                 
                 particle.style.setProperty('--tx', tx + 'px');
                 particle.style.setProperty('--ty', ty + 'px');
-                particle.style.animation = 'heartFloat 2s ease-out forwards';
+                particle.style.animation = 'heartFloat 1.5s ease-out forwards';
                 
                 document.body.appendChild(particle);
-                setTimeout(() => particle.remove(), 2000);
+                setTimeout(() => particle.remove(), 1500);
             }
         }
 
@@ -352,29 +311,29 @@
             const colors = ['#4ecdc4', '#45b7d1', '#f7dc6f', '#667eea', '#23d5ab'];
             
             const isMobile = window.innerWidth <= 768;
-            const particleCount = isMobile ? 60 : 120;
+            const particleCount = isMobile ? 45 : 90;
             
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'firework-particle';
                 particle.style.left = x + 'px';
                 particle.style.top = y + 'px';
-                particle.style.width = (Math.random() * 10 + 4) + 'px';
+                particle.style.width = (Math.random() * 8 + 3) + 'px';
                 particle.style.height = particle.style.width;
                 particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-                particle.style.boxShadow = `0 0 15px ${colors[Math.floor(Math.random() * colors.length)]}`;
+                particle.style.boxShadow = `0 0 12px ${colors[Math.floor(Math.random() * colors.length)]}`;
                 
                 const angle = (Math.PI * 2 * i) / particleCount;
-                const velocity = 100 + Math.random() * 200;
+                const velocity = 80 + Math.random() * 150;
                 const tx = Math.cos(angle) * velocity;
                 const ty = Math.sin(angle) * velocity;
                 
                 particle.style.setProperty('--tx', tx + 'px');
                 particle.style.setProperty('--ty', ty + 'px');
-                particle.style.animation = 'heartFloat 2s ease-out forwards';
+                particle.style.animation = 'heartFloat 1.5s ease-out forwards';
                 
                 document.body.appendChild(particle);
-                setTimeout(() => particle.remove(), 2000);
+                setTimeout(() => particle.remove(), 1500);
             }
         }
 
@@ -384,8 +343,8 @@
             const stars = ['⭐', '✨', '🌟', '💫'];
             
             const isMobile = window.innerWidth <= 768;
-            const starCount = isMobile ? 20 : 35;
-            const particleCount = isMobile ? 50 : 90;
+            const starCount = isMobile ? 15 : 25;
+            const particleCount = isMobile ? 40 : 70;
             
             // Tạo ngôi sao
             for (let i = 0; i < starCount; i++) {
@@ -394,10 +353,10 @@
                 star.textContent = stars[Math.floor(Math.random() * stars.length)];
                 star.style.left = x + 'px';
                 star.style.top = y + 'px';
-                star.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                star.style.fontSize = (Math.random() * 15 + 12) + 'px';
                 
                 const angle = (Math.PI * 2 * i) / starCount;
-                const velocity = 100 + Math.random() * 180;
+                const velocity = 80 + Math.random() * 150;
                 const tx = Math.cos(angle) * velocity;
                 const ty = Math.sin(angle) * velocity;
                 
@@ -405,7 +364,7 @@
                 star.style.setProperty('--ty', ty + 'px');
                 
                 document.body.appendChild(star);
-                setTimeout(() => star.remove(), 2000);
+                setTimeout(() => star.remove(), 1500);
             }
 
             // Particles vàng
@@ -414,22 +373,22 @@
                 particle.className = 'firework-particle';
                 particle.style.left = x + 'px';
                 particle.style.top = y + 'px';
-                particle.style.width = (Math.random() * 8 + 3) + 'px';
+                particle.style.width = (Math.random() * 6 + 2) + 'px';
                 particle.style.height = particle.style.width;
                 particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-                particle.style.boxShadow = `0 0 15px ${colors[Math.floor(Math.random() * colors.length)]}`;
+                particle.style.boxShadow = `0 0 12px ${colors[Math.floor(Math.random() * colors.length)]}`;
                 
                 const angle = (Math.PI * 2 * i) / particleCount;
-                const velocity = 80 + Math.random() * 200;
+                const velocity = 70 + Math.random() * 150;
                 const tx = Math.cos(angle) * velocity;
                 const ty = Math.sin(angle) * velocity;
                 
                 particle.style.setProperty('--tx', tx + 'px');
                 particle.style.setProperty('--ty', ty + 'px');
-                particle.style.animation = 'heartFloat 2s ease-out forwards';
+                particle.style.animation = 'heartFloat 1.5s ease-out forwards';
                 
                 document.body.appendChild(particle);
-                setTimeout(() => particle.remove(), 2000);
+                setTimeout(() => particle.remove(), 1500);
             }
         }
 
@@ -486,8 +445,8 @@
             
             // Điều chỉnh tần suất cho mobile
             const isMobile = window.innerWidth <= 768;
-            const interval = isMobile ? 1000 : 800; // Mobile: 1s, Desktop: 0.8s
-            const initialCount = isMobile ? 3 : 6;
+            const interval = isMobile ? 1200 : 1000; // Mobile: 1.2s, Desktop: 1s
+            const initialCount = isMobile ? 2 : 4;
             
             // Tự động bắn pháo hoa
             setInterval(autoFireworks, interval);
@@ -495,7 +454,7 @@
             // Bắn pháo hoa ban đầu
             setTimeout(() => {
                 for (let i = 0; i < initialCount; i++) {
-                    setTimeout(autoFireworks, i * 200);
+                    setTimeout(autoFireworks, i * 250);
                 }
             }, 300);
         };
