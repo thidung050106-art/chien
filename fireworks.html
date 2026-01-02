@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pháo Hoa Tình Yêu 💖</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom, #0a0a2e 0%, #16213e 50%, #1a1a3e 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .message-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 100;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            padding: 40px;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .message-container:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .message-container:active {
+            transform: translate(-50%, -50%) scale(0.98);
+        }
+
+        .love-message {
+            font-family: 'Pacifico', cursive;
+            font-size: 5em;
+            color: white;
+            text-shadow: 0 0 30px rgba(255, 105, 180, 0.9),
+                         0 0 60px rgba(255, 105, 180, 0.7),
+                         3px 3px 6px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            pointer-events: none;
+        }
+
+        .sub-message {
+            font-size: 2.5em;
+            color: white;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6),
+                         2px 2px 4px rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+        }
+
+        .click-hint {
+            font-size: 1.2em;
+            margin-top: 20px;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 15px 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.5);
+        }
+
+        .firework-particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .heart-particle {
+            position: absolute;
+            font-size: 20px;
+            pointer-events: none;
+            animation: heartFloat 2s ease-out forwards;
+        }
+
+        @keyframes heartFloat {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+        }
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, #0f0f0f 0%, transparent 100%);
+        }
+
+        .click-instruction {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.5em;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button" onclick="window.scrollTo(0,0);">← Quay lại</a>
+
+    <div class="message-container" onclick="changeMessage()" ontouchstart="changeMessage()">
+        <div class="love-message" id="loveMessage">Em Yêu ❤️</div>
+        <div class="sub-message" id="subMessage">Anh Yêu Em!</div>
+        <div class="click-hint">👆 Nhấn vào chữ đi nò</div>
+    </div>
+
+
+    <div class="ground"></div>
+
+    <script>
+        const messages = [
+            { main: 'Em Yêu ❤️', sub: 'Anh Yêu Em!' },
+            { main: 'Happy Birthday 🎂', sub: 'Chúc Em Sinh Nhật Vui Vẻ!' },
+            { main: 'You Are My Star ⭐', sub: 'Chúc Em Càng Ngày Càng Xinh!' },
+            { main: 'Beautiful Soul 🌸', sub: 'Hãy Sống Tích Cực Lên Nhé!' },
+            { main: 'Beautiful Soul 🌸', sub: 'Anh Sẽ Luôn Yêu Em' },
+            { main: 'I Love You 💖', sub: 'Anh Yêu Em Mãi Mãi!' },
+            { main: 'My Everything 💝', sub: 'Em Là Tất Cả Của Anh!' },
+            { main: 'Sweet Heart 🍭', sub: 'Yêu Em❤️❤️❤️❤️❤️' }
+        ];
+
+        let messageIndex = 0;
+
+        // Đổi thông điệp khi nhấn chuột
+        function changeMessage(event) {
+            // Ngăn chặn sự kiện lan truyền
+            if (event) {
+                event.stopPropagation();
+            }
+            
+            messageIndex = (messageIndex + 1) % messages.length;
+            const loveMsg = document.getElementById('loveMessage');
+            const subMsg = document.getElementById('subMessage');
+            
+            // Hiệu ứng fade khi đổi chữ
+            loveMsg.style.opacity = '0.3';
+            subMsg.style.opacity = '0.3';
+            
+            setTimeout(() => {
+                loveMsg.textContent = messages[messageIndex].main;
+                subMsg.textContent = messages[messageIndex].sub;
+                loveMsg.style.opacity = '1';
+                subMsg.style.opacity = '1';
+            }, 150);
+        }
+
+        // Tạo âm thanh pháo hoa
+        let audioContext = null;
+        let lastSoundTime = 0;
+        
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        function playFireworkSound() {
+            // Giới hạn tần suất âm thanh để không quá ồn
+            const now = Date.now();
+            if (now - lastSoundTime < 100) return;
+            lastSoundTime = now;
+            
+            if (!audioContext) initAudio();
+            
+            // Tạo âm thanh nổ
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Âm thanh pháo hoa: từ cao xuống thấp
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
+            
+            // Âm lượng: từ lớn đến nhỏ
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
+        
+        // Khởi tạo audio khi user tương tác lần đầu
+        document.addEventListener('click', initAudio, { once: true });
+        document.addEventListener('touchstart', initAudio, { once: true });
+        // Tạo sao
+        function createStars() {
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(star);
+            }
+        }
+
+        // Tạo pháo hoa trái tim (CỰC TO VÀ NHIỀU)
+        function createHeartFirework(x, y) {
+            const colors = ['#ff6b6b', '#ff1493', '#ff69b4', '#ff6b9d', '#f093fb', '#c44569'];
+            const hearts = ['❤️', '💕', '💖', '💗', '💝', '💞'];
+            
+            // Phát âm thanh
+            playFireworkSound();
+            
+            // Tạo trái tim (NHIỀU HỐN)
+            for (let i = 0; i < 60; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-particle';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = x + 'px';
+                heart.style.top = y + 'px';
+                heart.style.fontSize = (Math.random() * 35 + 25) + 'px';
+                
+                const angle = (Math.PI * 2 * i) / 60;
+                const velocity = 180 + Math.random() * 280;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                heart.style.setProperty('--tx', tx + 'px');
+                heart.style.setProperty('--ty', ty + 'px');
+                
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 2500);
+            }
+
+            // Tạo particles màu sắc (SIÊU NHIỀU)
+            for (let i = 0; i < 150; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework-particle';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.width = (Math.random() * 15 + 5) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.boxShadow = `0 0 20px ${colors[Math.floor(Math.random() * colors.length)]}`;
+                
+                const angle = (Math.PI * 2 * i) / 150;
+                const velocity = 100 + Math.random() * 300;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                particle.style.animation = 'heartFloat 2.5s ease-out forwards';
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 2500);
+            }
+        }
+
+        // Tạo pháo hoa hình tròn (CỰC TO VÀ NHIỀU)
+        function createCircleFirework(x, y) {
+            const colors = ['#4ecdc4', '#45b7d1', '#f7dc6f', '#667eea', '#23d5ab'];
+            
+            // Phát âm thanh
+            playFireworkSound();
+            
+            for (let i = 0; i < 180; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework-particle';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.width = (Math.random() * 18 + 6) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.boxShadow = `0 0 30px ${colors[Math.floor(Math.random() * colors.length)]}`;
+                
+                const angle = (Math.PI * 2 * i) / 180;
+                const velocity = 150 + Math.random() * 280;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                particle.style.animation = 'heartFloat 2.5s ease-out forwards';
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 2500);
+            }
+        }
+
+        // Tạo pháo hoa hình sao (CỰC TO VÀ NHIỀU)
+        function createStarFirework(x, y) {
+            const colors = ['#ffd700', '#ffed4e', '#fff44f', '#ffeb3b'];
+            const stars = ['⭐', '✨', '🌟', '💫'];
+            
+            // Phát âm thanh
+            playFireworkSound();
+            
+            // Tạo ngôi sao (NHIỀU HƠN VÀ TO HƠN)
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'heart-particle';
+                star.textContent = stars[Math.floor(Math.random() * stars.length)];
+                star.style.left = x + 'px';
+                star.style.top = y + 'px';
+                star.style.fontSize = (Math.random() * 35 + 25) + 'px';
+                
+                const angle = (Math.PI * 2 * i) / 50;
+                const velocity = 130 + Math.random() * 220;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                star.style.setProperty('--tx', tx + 'px');
+                star.style.setProperty('--ty', ty + 'px');
+                
+                document.body.appendChild(star);
+                
+                setTimeout(() => star.remove(), 2500);
+            }
+
+            // Particles vàng (SIÊU NHIỀU)
+            for (let i = 0; i < 130; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework-particle';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.width = (Math.random() * 12 + 4) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.boxShadow = `0 0 35px ${colors[Math.floor(Math.random() * colors.length)]}`;
+                
+                const angle = (Math.PI * 2 * i) / 130;
+                const velocity = 100 + Math.random() * 280;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                particle.style.animation = 'heartFloat 2.5s ease-out forwards';
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 2500);
+            }
+        }
+
+        // Click để bắn pháo hoa
+        document.body.addEventListener('click', (e) => {
+            // Kiểm tra xem có phải click vào message container không
+            if (e.target.closest('.message-container')) {
+                return; // Nếu có, không bắn pháo hoa
+            }
+            
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            const types = ['heart', 'circle', 'star'];
+            const randomType = types[Math.floor(Math.random() * types.length)];
+            
+            switch(randomType) {
+                case 'heart':
+                    createHeartFirework(x, y);
+                    break;
+                case 'circle':
+                    createCircleFirework(x, y);
+                    break;
+                case 'star':
+                    createStarFirework(x, y);
+                    break;
+            }
+        });
+
+        // Tự động bắn pháo hoa
+        function autoFireworks() {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * (window.innerHeight * 0.6);
+            
+            const types = ['heart', 'circle', 'star'];
+            const randomType = types[Math.floor(Math.random() * types.length)];
+            
+            switch(randomType) {
+                case 'heart':
+                    createHeartFirework(x, y);
+                    break;
+                case 'circle':
+                    createCircleFirework(x, y);
+                    break;
+                case 'star':
+                    createStarFirework(x, y);
+                    break;
+            }
+        }
+
+        // Khởi tạo
+        window.onload = function() {
+            createStars();
+            
+            // Tự động bắn pháo hoa mỗi 0.6 giây (NHANH HƠN VÀ NHIỀU HƠN)
+            setInterval(autoFireworks, 600);
+            
+            // Bắn pháo hoa ban đầu (CỰC NHIỀU)
+            setTimeout(() => {
+                for (let i = 0; i < 12; i++) {
+                    setTimeout(autoFireworks, i * 150);
+                }
+            }, 200);
+        };
+    </script>
+</body>
+</html>
